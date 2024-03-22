@@ -5,6 +5,7 @@ import (
 	"gorm.io/gorm"
 	"main.go/configs"
 	"main.go/middlewares"
+	"main.go/router"
 )
 
 var db *gorm.DB = configs.SetupDatabaseConnection()
@@ -16,7 +17,7 @@ func main() {
 
 	r.Use(middlewares.CorsMiddleware())
 
-	routes.SetupRouter(r, db)
+	router.SetupRouter(r, db)
 
 	port := configs.GetPort()
 

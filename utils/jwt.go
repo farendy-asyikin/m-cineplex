@@ -10,7 +10,7 @@ import (
 	"github.com/golang-jwt/jwt/v5"
 )
 
-func GenerateToken(user models.User, roleIds []uint64, roleNames []string) (*string, error) {
+func GenerateToken(user models.User) (*string, error) {
 	jwtHoursExpireEnv := os.Getenv("JWT_HOURS_EXPIRE")
 	if jwtHoursExpireEnv == "" {
 		jwtHoursExpireEnv = "24"
@@ -23,7 +23,7 @@ func GenerateToken(user models.User, roleIds []uint64, roleNames []string) (*str
 	claims := &jwt.MapClaims{
 		"user_id": user.ID,
 		"name":    user.Name,
-		"role":    role,
+		"role":    user.Role,
 		"exp":     time.Now().Add(time.Hour * time.Duration(jwtHoursExpire)).Unix(),
 	}
 
