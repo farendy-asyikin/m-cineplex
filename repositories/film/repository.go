@@ -65,3 +65,14 @@ func (r *filmRepository) DeleteFilmByID(ID string) error {
 
 	return nil
 }
+
+func (r *filmRepository) ListFilm() ([]*models.Film, error) {
+	var film []*models.Film
+
+	err := r.db.Find(&film).Error
+	if err != nil {
+		return nil, err
+	}
+
+	return film, nil
+}

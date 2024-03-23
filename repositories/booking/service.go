@@ -7,7 +7,34 @@ import (
 )
 
 func (r *bookingRepository) CreateBooking(booking models.Booking) (*models.Booking, error) {
-	return nil, nil
+	tx := r.db.Begin()
+	defer func() {
+		if r := recover(); r != nil {
+			tx.Rollback()
+		}
+	}()
+
+	var seat models.Seat
+	if err := tx.Where("id = ? AND is_booked = ?", booking.SeatID, false).First(&seat).Error; err != nil {
+		tx.Rollback()
+		return nil, errors.New("failed to book, seat is already booked")
+	}
+
+	if err := tx.Create(&booking).Error; err != nil {
+		tx.Rollback()
+		return nil, err
+	}
+
+	if err := tx.Model(&seat).Update("is_booked", true).Error; err != nil {
+		tx.Rollback()
+		return nil, err
+	}
+
+	if err := tx.Commit().Error; err != nil {
+		return nil, err
+	}
+
+	return &booking, nil
 }
 
 func (r *bookingRepository) GetBookingByID(ID string) (*models.Booking, error) {
