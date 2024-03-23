@@ -1,29 +1,52 @@
 package filmservice
 
 import (
+	"errors"
 	"main.go/models"
 	"main.go/schemas"
 )
 
 func (s *filmService) CreateFilm(request schemas.CreateFilmRequest) (*models.Film, error) {
-
-	user := models.Film{
-		Name: request.Name,
-
-		Password: string(passwordHash),
-	}
-
-	result, err := s.filmRepository.CreateUser(user)
+	isExist, err := s.filmRepository.GetFilmByName(request.Name)
 	if err != nil {
 		return nil, err
 	}
 
-	return result, nil
+	if isExist != nil {
+		return nil, errors.New("film already exist")
+	}
+
+	film := models.Film{
+		Name:       request.Name,
+		LocationID: request.LocationID,
+	}
+
+	res, err := s.filmRepository.CreateFilm(film)
+	if err != nil {
+		return nil, err
+	}
+
+	return res, nil
 }
 
 func (s *filmService) UpdateFilm(request schemas.UpdateFilmRequest, film models.Film) (*models.Film, error) {
+	if request.Name != nil {
+		isExist, err := s.filmRepository.GetFilmByName(*request.Name)
+		if err != nil {
+			return nil, err
+		}
+		if isExist != nil && isExist.ID != film.ID {
+			return nil, errors.New("film already exist")
+		}
 
-	result, err := s.filmRepository.UpdateFilm(user)
+		film.Name = *request.Name
+	}
+
+	if request.LocationID != nil {
+		film.LocationID = *request.LocationID
+	}
+
+	result, err := s.filmRepository.UpdateFilm(film)
 	if err != nil {
 		return nil, err
 	}
@@ -40,6 +63,11 @@ func (s *filmService) DeleteFilmByID(ID string) error {
 	return nil
 }
 
-func (s *filmService) GetFilmByID(ID string) (*models.Film, *schemas.DetailFilmResponse, error) {
+func (s *filmService) GetFilmByID(ID string) (*models.Film, error) {
+	film, err := s.filmRepository.GetFilmByID(ID)
+	if err != nil {
+		return nil, err
+	}
 
+	return film, nil
 }

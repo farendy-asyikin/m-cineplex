@@ -17,25 +17,25 @@ func (h *filmHandler) CreateFilm(ctx *gin.Context) {
 		return
 	}
 
-	user, err := h.filmService.CreateFilm(request)
+	film, err := h.filmService.CreateFilm(request)
 	if err != nil {
 		utils.ApiResponse(ctx, http.StatusBadRequest, err.Error(), nil, nil)
 		return
 	}
 
-	utils.ApiResponse(ctx, http.StatusOK, "success", user, nil)
+	utils.ApiResponse(ctx, http.StatusOK, "success", film, nil)
 }
 
 func (h *filmHandler) GetFilmByID(ctx *gin.Context) {
 	id := ctx.Param("id")
 
-	_, user, err := h.filmService.GetFilmByID(id)
+	film, err := h.filmService.GetFilmByID(id)
 	if err != nil {
 		utils.ApiResponse(ctx, http.StatusBadRequest, err.Error(), nil, nil)
 		return
 	}
 
-	utils.ApiResponse(ctx, http.StatusOK, "success", user, nil)
+	utils.ApiResponse(ctx, http.StatusOK, "success", film, nil)
 }
 
 func (h *filmHandler) UpdateFilm(ctx *gin.Context) {
@@ -50,7 +50,7 @@ func (h *filmHandler) UpdateFilm(ctx *gin.Context) {
 		return
 	}
 
-	film, _, err := h.filmService.GetFilmByID(id)
+	film, err := h.filmService.GetFilmByID(id)
 	if err != nil {
 		utils.ApiResponse(ctx, http.StatusBadRequest, err.Error(), nil, nil)
 		return
@@ -68,7 +68,7 @@ func (h *filmHandler) UpdateFilm(ctx *gin.Context) {
 func (h *filmHandler) DeleteFilmByID(ctx *gin.Context) {
 	ID := ctx.Param("id")
 
-	_, _, err := h.filmService.GetFilmByID(ID)
+	_, err := h.filmService.GetFilmByID(ID)
 	if err != nil {
 		utils.ApiResponse(ctx, http.StatusBadRequest, err.Error(), nil, nil)
 		return

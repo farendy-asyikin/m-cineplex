@@ -8,6 +8,6 @@ type Film struct {
 	LocationID uint64    `gorm:"not null" json:"location_id"`
 	Location   Location  `gorm:"foreignkey:LocationID" json:"location"`
 	IsActive   bool      `gorm:"default:true" json:"is_active"`
-	CreatedAt  time.Time `gorm:"type:datetime;default:CURRENT_TIMESTAMP()" json:"created_at"`
-	UpdatedAt  time.Time `gorm:"type:datetime;default:CURRENT_TIMESTAMP()" json:"updated_at"`
+	CreatedAt  time.Time `gorm:"type:timestamp;default:CURRENT_TIMESTAMP" json:"created_at"`
+	UpdatedAt  time.Time `gorm:"type:timestamp;default:CURRENT_TIMESTAMP" json:"updated_at"`
 }

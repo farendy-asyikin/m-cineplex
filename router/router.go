@@ -4,6 +4,7 @@ import (
 	"github.com/gin-gonic/gin"
 	"gorm.io/gorm"
 	authhandler "main.go/handlers/auth"
+	bookinghandler "main.go/handlers/booking"
 	filmhandler "main.go/handlers/film"
 	userhandler "main.go/handlers/users"
 	"main.go/middlewares"
@@ -11,6 +12,7 @@ import (
 	filmrepository "main.go/repositories/film"
 	userrepository "main.go/repositories/users"
 	authservice "main.go/services/auth"
+	bookingservice "main.go/services/booking"
 	filmservice "main.go/services/film"
 	userservice "main.go/services/user"
 )
@@ -27,13 +29,13 @@ func SetupRouter(r *gin.Engine, db *gorm.DB) {
 		authService    authservice.AuthService       = authservice.NewAuthService(authRepository)
 		userService    userservice.UserService       = userservice.NewUserService(userRepository)
 		filmService    filmservice.FilmService       = filmservice.NewFilmService(filmRepository)
-		bookingService bookingservice.BookingService = bookingservice.NewBookingServixe(bookingRepository)
+		bookingService bookingservice.BookingService = bookingservice.NewBookingService(bookingRepository)
 
 		//handler
 		authHandler    authhandler.AuthHandler       = authhandler.NewAuthHandler(authService)
 		userHandler    userhandler.UserHandler       = userhandler.NewUserHandler(userService)
 		filmHandler    filmhandler.FilmHandler       = filmhandler.NewFilmHandler(filmService)
-		bookingHandler bookinghandler.BookingHandler = bookinghandler.NewFilmHandler(bookingService)
+		bookingHandler bookinghandler.BookingHandler = bookinghandler.NewBookingHandler(bookingService)
 
 		//middleware
 		authMiddleware  = middlewares.AuthMiddleware()
@@ -58,20 +60,15 @@ func SetupRouter(r *gin.Engine, db *gorm.DB) {
 		filmRoutes := apiRoutes.Group("films")
 		{
 			filmRoutes.POST("", adminMiddleware, filmHandler.CreateFilm)
-			filmRoutes.GET("", authMiddleware, filmHandler.ListFilm)
-			filmRoutes.GET("/:id", authMiddleware, filmHandler.DetailFilm)
+			filmRoutes.GET("/:id", authMiddleware, filmHandler.GetFilmByID)
 			filmRoutes.PUT("/:id", adminMiddleware, filmHandler.UpdateFilm)
-			filmRoutes.DELETE("/:id", adminMiddleware, filmHandler.DeleteFilm)
+			filmRoutes.DELETE("/:id", adminMiddleware, filmHandler.DeleteFilmByID)
 		}
 
 		bookingRoutes := apiRoutes.Group("booking")
 		{
 			bookingRoutes.POST("", authMiddleware, bookingHandler.CreateBooking)
-			bookingRoutes.GET("", adminMiddleware, bookingHandler.ListBooking)
-			bookingRoutes.GET("", authMiddleware, bookingHandler.DetailBooking)
-			bookingRoutes.GET("", authMiddleware, bookingHandler.ListByUserIdBooking)
-			bookingRoutes.PUT("", adminMiddleware, bookingHandler.UpdateBooking)
-			bookingRoutes.DELETE("", adminMiddleware, bookingHandler.DeleteBooking)
+			bookingRoutes.GET("/:id", authMiddleware, bookingHandler.GetBookingByID)
 		}
 	}
 

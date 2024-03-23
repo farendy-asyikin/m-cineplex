@@ -8,6 +8,7 @@ import (
 type FilmRepository interface {
 	CreateFilm(film models.Film) (*models.Film, error)
 	GetFilmByID(ID string) (*models.Film, error)
+	GetFilmByName(name string) (*models.Film, error)
 	UpdateFilm(film models.Film) (*models.Film, error)
 	DeleteFilmByID(ID string) error
 }

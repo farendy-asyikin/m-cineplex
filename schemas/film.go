@@ -2,13 +2,13 @@ package schemas
 
 type CreateFilmRequest struct {
 	Name       string `json:"name" binding:"required"`
-	LocationID string `json:"email" binding:"required,email"`
-	IsActive   bool   `gorm:"default:true" json:"is_active"`
+	LocationID uint64 `json:"location_id" binding:"required"`
+	IsActive   bool   `json:"is_active"`
 }
 
 type UpdateFilmRequest struct {
 	Name       *string `json:"name"`
-	LocationID *string `json:"email"`
+	LocationID *uint64 `json:"location_id"`
 	IsActive   *bool   `json:"is_active"`
 }
 

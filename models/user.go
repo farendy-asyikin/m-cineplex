@@ -9,6 +9,6 @@ type User struct {
 	Password  string    `gorm:"type:varchar(255);not null" json:"password"`
 	Role      string    `gorm:"type:varchar(255);not null" json:"role"`
 	IsActive  bool      `gorm:"default:true" json:"is_active"`
-	CreatedAt time.Time `gorm:"type:datetime;default:CURRENT_TIMESTAMP()" json:"created_at"`
-	UpdatedAt time.Time `gorm:"type:datetime;default:CURRENT_TIMESTAMP()" json:"updated_at"`
+	CreatedAt time.Time `gorm:"type:timestamp;default:CURRENT_TIMESTAMP" json:"created_at"`
+	UpdatedAt time.Time `gorm:"type:timestamp;default:CURRENT_TIMESTAMP" json:"updated_at"`
 }
