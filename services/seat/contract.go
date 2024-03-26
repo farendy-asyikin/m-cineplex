@@ -6,7 +6,7 @@ import (
 )
 
 type SeatService interface {
-	ListSeat() ([]*schemas.ListSeatResponse, error)
+	ListUnbookedSeatByFilmIDAndLocationID(filmID, locationID uint64) ([]*schemas.ListSeatResponse, error)
 }
 
 type seatService struct {

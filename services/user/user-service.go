@@ -35,6 +35,7 @@ func (s *userService) CreateUser(request schemas.CreateUserRequest) (*models.Use
 		Name:     request.Name,
 		Email:    request.Email,
 		Password: string(passwordHash),
+		Role:     "user",
 	}
 
 	result, err := s.userRepository.CreateUser(user)
@@ -54,6 +55,7 @@ func (s *userService) GetUserByID(ID string) (*models.User, *schemas.DetailUserR
 	response := schemas.DetailUserResponse{
 		Name:  user.Name,
 		Email: user.Email,
+		Role:  user.Role,
 	}
 
 	return user, &response, nil
@@ -80,6 +82,16 @@ func (s *userService) UpdateUser(request schemas.UpdateUserRequest, user models.
 	}
 
 	result, err := s.userRepository.UpdateUser(user)
+	if err != nil {
+		return nil, err
+	}
+
+	return result, nil
+}
+
+func (s *userService) UpdateUserRoleBySuperuser(request schemas.UpdateUserRoleRequest, user models.User, userID uint64) (*models.User, error) {
+	user.Role = request.Role
+	result, err := s.userRepository.UpdateUserRoleBySuperuser(user, userID)
 	if err != nil {
 		return nil, err
 	}

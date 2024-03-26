@@ -38,6 +38,14 @@ func (h *filmHandler) GetFilmByID(ctx *gin.Context) {
 	utils.ApiResponse(ctx, http.StatusOK, "success", film, nil)
 }
 
+func (h *filmHandler) ListFilm(ctx *gin.Context) {
+	film, err := h.filmService.ListFilm()
+	if err != nil {
+		return
+	}
+	utils.ApiResponse(ctx, http.StatusOK, "success", film, nil)
+}
+
 func (h *filmHandler) UpdateFilm(ctx *gin.Context) {
 	id := ctx.Param("id")
 	var request schemas.UpdateFilmRequest

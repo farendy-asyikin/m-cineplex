@@ -6,7 +6,7 @@ import (
 )
 
 type SeatRepository interface {
-	ListNotBookedSeat() ([]*models.Seat, error)
+	ListUnbookedSeatByFilmIDAndLocationID(filmID, locationID uint64) ([]*models.Seat, error)
 }
 
 type seatRepository struct {

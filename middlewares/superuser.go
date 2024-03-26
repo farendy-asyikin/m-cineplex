@@ -6,20 +6,32 @@ import (
 	"main.go/constants"
 	"main.go/utils"
 	"net/http"
-	"slices"
 )
 
 func SuperUserMiddleware() gin.HandlerFunc {
 	return func(ctx *gin.Context) {
-		user := ctx.MustGet("user").(*jwt.MapClaims)
-		roleNames := (*user)["role_names"].([]any)
+		user, exists := ctx.Get("user")
+		if !exists {
+			ctx.Abort()
+			utils.ApiResponse(ctx, http.StatusUnauthorized, "user not found in context", nil, nil)
+			return
+		}
 
-		isSuperUser := slices.ContainsFunc(roleNames, func(roleName any) bool {
-			roleNameStr := roleName.(string)
-			return roleNameStr == constants.ROLE_NAMES["SUPER_USER"]
-		})
+		claims, ok := user.(*jwt.MapClaims)
+		if !ok {
+			ctx.Abort()
+			utils.ApiResponse(ctx, http.StatusUnauthorized, "invalid user claims", nil, nil)
+			return
+		}
 
-		if !isSuperUser {
+		role, roleExists := (*claims)["role"].(string)
+		if !roleExists {
+			ctx.Abort()
+			utils.ApiResponse(ctx, http.StatusUnauthorized, "user role not found in claims", nil, nil)
+			return
+		}
+
+		if role != constants.ROLE["SUPER_USER"] {
 			ctx.Abort()
 			utils.ApiResponse(ctx, http.StatusUnauthorized, "only superuser can access this endpoint", nil, nil)
 			return

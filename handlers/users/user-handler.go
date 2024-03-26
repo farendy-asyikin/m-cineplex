@@ -5,6 +5,7 @@ import (
 	"main.go/schemas"
 	"main.go/utils"
 	"net/http"
+	"strconv"
 )
 
 func (h *userHandler) CreateUser(ctx *gin.Context) {
@@ -57,6 +58,39 @@ func (h *userHandler) UpdateUser(ctx *gin.Context) {
 	}
 
 	user, err = h.userService.UpdateUser(request, *user)
+	if err != nil {
+		utils.ApiResponse(ctx, http.StatusBadRequest, err.Error(), nil, nil)
+		return
+	}
+
+	utils.ApiResponse(ctx, http.StatusOK, "success", user, nil)
+}
+
+func (h *userHandler) UpdateUserRoleBySuperuser(ctx *gin.Context) {
+	id := ctx.Param("id")
+	idUint, err := strconv.ParseUint(id, 10, 64)
+	if err != nil {
+		utils.ApiResponse(ctx, http.StatusBadRequest, err.Error(), nil, nil)
+		return
+	}
+
+	var request schemas.UpdateUserRoleRequest
+
+	err = ctx.ShouldBind(&request)
+	if err != nil {
+
+		error := utils.FormatValidationError(err)
+		utils.ApiResponse(ctx, http.StatusBadRequest, error, nil, nil)
+		return
+	}
+
+	user, _, err := h.userService.GetUserByID(id)
+	if err != nil {
+		utils.ApiResponse(ctx, http.StatusBadRequest, err.Error(), nil, nil)
+		return
+	}
+
+	user, err = h.userService.UpdateUserRoleBySuperuser(request, *user, idUint)
 	if err != nil {
 		utils.ApiResponse(ctx, http.StatusBadRequest, err.Error(), nil, nil)
 		return

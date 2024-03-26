@@ -9,6 +9,7 @@ type UserHandler interface {
 	CreateUser(ctx *gin.Context)
 	GetUserByID(ctx *gin.Context)
 	UpdateUser(ctx *gin.Context)
+	UpdateUserRoleBySuperuser(ctx *gin.Context)
 	DeleteUserByID(ctx *gin.Context)
 }
 

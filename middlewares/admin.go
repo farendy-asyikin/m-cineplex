@@ -12,11 +12,11 @@ import (
 func AdminMiddleware() gin.HandlerFunc {
 	return func(ctx *gin.Context) {
 		user := ctx.MustGet("user").(*jwt.MapClaims)
-		roleNames := (*user)["role_names"].([]any)
+		roleNames := (*user)["role"].([]any)
 
 		isSuperUser := slices.ContainsFunc(roleNames, func(roleName any) bool {
 			roleNameStr := roleName.(string)
-			return roleNameStr == constants.ROLE_NAMES["ADMIN"]
+			return roleNameStr == constants.ROLE["ADMIN"]
 		})
 
 		if !isSuperUser {
