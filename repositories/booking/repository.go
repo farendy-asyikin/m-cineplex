@@ -14,18 +14,17 @@ func (r *bookingRepository) CreateBooking(booking models.Booking) (*models.Booki
 		}
 	}()
 
-	var seat models.Seat
-	if err := tx.Where("id = ? AND is_booked = ?", booking.SeatID, false).First(&seat).Error; err != nil {
-		tx.Rollback()
-		return nil, errors.New("failed to book, seat is already booked")
-	}
-
 	if err := tx.Create(&booking).Error; err != nil {
 		tx.Rollback()
 		return nil, err
 	}
 
-	if err := tx.Model(&seat).Update("is_booked", true).Error; err != nil {
+	bookedSeat := models.BookedSeat{
+		SeatID:     booking.SeatID,
+		LocationID: booking.LocationID,
+	}
+
+	if err := tx.Create(&bookedSeat).Error; err != nil {
 		tx.Rollback()
 		return nil, err
 	}

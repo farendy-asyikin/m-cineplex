@@ -15,14 +15,3 @@ func (r *seatRepository) ListUnbookedSeatByFilmIDAndLocationID(filmID, locationI
 
 	return unbookedSeats, nil
 }
-
-//func (r *seatRepository) ListUnbookedSeatByFilmIDAndLocationID() ([]*models.Seat, error) {
-//	var readySeat []*models.Seat
-//
-//	err := r.db.Find(&readySeat).Where("is_booked", false).Error
-//	if err != nil {
-//		return nil, err
-//	}
-//
-//	return readySeat, nil
-//}

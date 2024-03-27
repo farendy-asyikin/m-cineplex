@@ -7,9 +7,9 @@ type Booking struct {
 	UserID      uint64    `gorm:"not null" json:"user_id"`
 	User        User      `gorm:"foreignkey:UserID" json:"user"`
 	SeatID      uint64    `gorm:"not null" json:"seat_id"`
-	Seat        Seat      `gorm:"foreignkey:LocationID" json:"seat"`
+	Seat        Seat      `gorm:"foreignkey:SeatID" json:"seat"`
 	FilmID      uint64    `gorm:"not null" json:"film_id"`
-	Film        Film      `gorm:"foreignkey:FilmID" json:"film"`
+	Film        Film      `gorm:"foreignkey:FilmID" json:"Film"`
 	LocationID  uint64    `gorm:"not null" json:"location_id"`
 	Location    Location  `gorm:"foreignkey:LocationID" json:"location"`
 	BookingTime time.Time `gorm:"type:timestamp;default:CURRENT_TIMESTAMP" json:"booking_time"`
