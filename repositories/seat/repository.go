@@ -7,7 +7,9 @@ func (r *seatRepository) ListUnbookedSeatByFilmIDAndLocationID(filmID, locationI
 
 	err := r.db.
 		Joins("JOIN films ON seats.location_id = films.location_id").
-		Where("seats.location_id = ? AND films.id = ? AND seats.is_booked = ?", locationID, filmID, false).
+		Joins("LEFT JOIN booked_seats ON seats.id = booked_seats.seat_id").
+		Where("seats.location_id = ? AND films.id = ? AND booked_seats.id IS NULL", locationID, filmID).
+		Order("seats.id").
 		Find(&unbookedSeats).Error
 	if err != nil {
 		return nil, err

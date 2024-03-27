@@ -12,6 +12,7 @@ import (
 	"main.go/middlewares"
 	bookingrepository "main.go/repositories/booking"
 	filmrepository "main.go/repositories/film"
+	"main.go/repositories/is_booked"
 	locationrepository "main.go/repositories/location"
 	seatrepository "main.go/repositories/seat"
 	userrepository "main.go/repositories/users"
@@ -32,12 +33,13 @@ func SetupRouter(r *gin.Engine, db *gorm.DB) {
 		bookingRepository  bookingrepository.BookingRepository   = bookingrepository.NewBookingRepository(db)
 		seatRepository     seatrepository.SeatRepository         = seatrepository.NewSeatRepository(db)
 		locationRepository locationrepository.LocationRepository = locationrepository.NewLocationRepository(db)
+		isBookedRepository is_booked.IsBookedRepository          = is_booked.NewIsBookedRepository(db)
 
 		//service
 		authService     authservice.AuthService         = authservice.NewAuthService(authRepository)
 		userService     userservice.UserService         = userservice.NewUserService(userRepository)
 		filmService     filmservice.FilmService         = filmservice.NewFilmService(filmRepository)
-		bookingService  bookingservice.BookingService   = bookingservice.NewBookingService(bookingRepository)
+		bookingService  bookingservice.BookingService   = bookingservice.NewBookingService(bookingRepository, isBookedRepository)
 		seatService     seatservice.SeatService         = seatservice.NewSeatService(seatRepository)
 		locationService locationservice.LocationService = locationservice.NewLocationService(locationRepository)
 

@@ -1,11 +1,19 @@
 package bookingservice
 
 import (
+	"errors"
+	"fmt"
 	"main.go/models"
 	"main.go/schemas"
 )
 
 func (s *bookingService) CreateBooking(request schemas.CreateBookingRequest) (*models.Booking, error) {
+
+	isBooked, _ := s.isBookedRepository.GetBookedSeatBySeatIDAndFilm(request.FilmID, request.SeatID)
+	fmt.Println(isBooked)
+	if isBooked.ID != 0 {
+		return nil, errors.New("Seat Already Booked")
+	}
 
 	bkg := models.Booking{
 		UserID:     request.UserID,

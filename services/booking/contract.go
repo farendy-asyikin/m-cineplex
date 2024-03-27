@@ -3,6 +3,7 @@ package bookingservice
 import (
 	"main.go/models"
 	bookingrepository "main.go/repositories/booking"
+	"main.go/repositories/is_booked"
 	"main.go/schemas"
 )
 
@@ -12,13 +13,16 @@ type BookingService interface {
 }
 
 type bookingService struct {
-	bookingRepository bookingrepository.BookingRepository
+	bookingRepository  bookingrepository.BookingRepository
+	isBookedRepository is_booked.IsBookedRepository
 }
 
 func NewBookingService(
 	bookingRepository bookingrepository.BookingRepository,
+	isBookedRepository is_booked.IsBookedRepository,
 ) *bookingService {
 	return &bookingService{
-		bookingRepository: bookingRepository,
+		bookingRepository:  bookingRepository,
+		isBookedRepository: isBookedRepository,
 	}
 }
