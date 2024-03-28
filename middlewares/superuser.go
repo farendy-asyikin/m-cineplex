@@ -1,41 +1,28 @@
 package middlewares
 
 import (
+	"fmt"
 	"github.com/gin-gonic/gin"
 	"github.com/golang-jwt/jwt/v5"
-	"main.go/constants"
-	"main.go/utils"
-	"net/http"
 )
 
 func SuperUserMiddleware() gin.HandlerFunc {
 	return func(ctx *gin.Context) {
-		user, exists := ctx.Get("user")
-		if !exists {
-			ctx.Abort()
-			utils.ApiResponse(ctx, http.StatusUnauthorized, "user not found in context", nil, nil)
-			return
-		}
+		user := ctx.MustGet("user").(*jwt.MapClaims)
+		id := (*user)["id"].([]any)
 
-		claims, ok := user.(*jwt.MapClaims)
-		if !ok {
-			ctx.Abort()
-			utils.ApiResponse(ctx, http.StatusUnauthorized, "invalid user claims", nil, nil)
-			return
-		}
+		//isSuperUser := slices.ContainsFunc(roleNames, func(roleName any) bool {
+		//	roleNameStr := roleName.(string)
+		//	return roleNameStr == constants.ROLE["SUPER_USER"]
+		//})
+		//
+		//if !isSuperUser {
+		//	ctx.Abort()
+		//	utils.ApiResponse(ctx, http.StatusUnauthorized, "only superuser can access this endpoint", nil, nil)
+		//	return
+		//}
 
-		role, roleExists := (*claims)["role"].(string)
-		if !roleExists {
-			ctx.Abort()
-			utils.ApiResponse(ctx, http.StatusUnauthorized, "user role not found in claims", nil, nil)
-			return
-		}
-
-		if role != constants.ROLE["SUPER_USER"] {
-			ctx.Abort()
-			utils.ApiResponse(ctx, http.StatusUnauthorized, "only superuser can access this endpoint", nil, nil)
-			return
-		}
+		fmt.Println(id)
 
 		ctx.Next()
 	}

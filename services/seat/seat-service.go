@@ -11,10 +11,10 @@ func (s *seatService) ListUnbookedSeatByFilmIDAndLocationID(filmID, locationID u
 	var res []*schemas.ListSeatResponse
 	for _, seat := range seats {
 		res = append(res, &schemas.ListSeatResponse{
-			ID:     seat.ID,
-			Row:    seat.Row,
-			Column: seat.Column,
-			//Location: seat.LocationID,
+			ID:       seat.ID,
+			Row:      seat.Row,
+			Column:   seat.Column,
+			Location: seat.Location.Name,
 		})
 	}
 	return res, nil
