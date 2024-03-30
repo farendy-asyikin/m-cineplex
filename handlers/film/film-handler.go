@@ -29,7 +29,7 @@ func (h *filmHandler) CreateFilm(ctx *gin.Context) {
 func (h *filmHandler) GetFilmByID(ctx *gin.Context) {
 	id := ctx.Param("id")
 
-	film, err := h.filmService.GetFilmByID(id)
+	_, film, err := h.filmService.GetFilmByID(id)
 	if err != nil {
 		utils.ApiResponse(ctx, http.StatusBadRequest, err.Error(), nil, nil)
 		return
@@ -58,7 +58,7 @@ func (h *filmHandler) UpdateFilm(ctx *gin.Context) {
 		return
 	}
 
-	film, err := h.filmService.GetFilmByID(id)
+	film, _, err := h.filmService.GetFilmByID(id)
 	if err != nil {
 		utils.ApiResponse(ctx, http.StatusBadRequest, err.Error(), nil, nil)
 		return
@@ -76,7 +76,7 @@ func (h *filmHandler) UpdateFilm(ctx *gin.Context) {
 func (h *filmHandler) DeleteFilmByID(ctx *gin.Context) {
 	ID := ctx.Param("id")
 
-	_, err := h.filmService.GetFilmByID(ID)
+	_, _, err := h.filmService.GetFilmByID(ID)
 	if err != nil {
 		utils.ApiResponse(ctx, http.StatusBadRequest, err.Error(), nil, nil)
 		return

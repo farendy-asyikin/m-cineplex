@@ -17,7 +17,7 @@ func (r *filmRepository) CreateFilm(film models.Film) (*models.Film, error) {
 
 func (r *filmRepository) GetFilmByID(ID string) (*models.Film, error) {
 	var film models.Film
-	err := r.db.First(&film, ID).Error
+	err := r.db.Preload("Location").First(&film, ID).Error
 	if err != nil {
 		if errors.Is(err, gorm.ErrRecordNotFound) {
 			return nil, errors.New("film not found")
@@ -69,7 +69,7 @@ func (r *filmRepository) DeleteFilmByID(ID string) error {
 func (r *filmRepository) ListFilm() ([]*models.Film, error) {
 	var film []*models.Film
 
-	err := r.db.Find(&film).Error
+	err := r.db.Preload("Location").Find(&film).Error
 	if err != nil {
 		return nil, err
 	}

@@ -69,6 +69,22 @@ func (s *filmService) ListFilm() ([]*schemas.ListFilmResponse, error) {
 	return res, nil
 }
 
+func (s *filmService) GetFilmByID(ID string) (*models.Film, *schemas.DetailFilmResponse, error) {
+	film, err := s.filmRepository.GetFilmByID(ID)
+	if err != nil {
+		return nil, nil, err
+	}
+
+	res := schemas.DetailFilmResponse{
+		ID:       film.ID,
+		Name:     film.Name,
+		Location: film.Location.Name,
+		IsActive: film.IsActive,
+	}
+
+	return nil, &res, nil
+}
+
 func (s *filmService) DeleteFilmByID(ID string) error {
 	err := s.filmRepository.DeleteFilmByID(ID)
 	if err != nil {
@@ -76,13 +92,4 @@ func (s *filmService) DeleteFilmByID(ID string) error {
 	}
 
 	return nil
-}
-
-func (s *filmService) GetFilmByID(ID string) (*models.Film, error) {
-	film, err := s.filmRepository.GetFilmByID(ID)
-	if err != nil {
-		return nil, err
-	}
-
-	return film, nil
 }

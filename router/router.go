@@ -54,7 +54,7 @@ func SetupRouter(r *gin.Engine, db *gorm.DB) {
 		//middleware
 		authMiddleware = middlewares.AuthMiddleware()
 		//adminMiddleware = middlewares.AdminMiddleware()
-		//superuserMiddleware = middlewares.SuperUserMiddleware()
+		superuserMiddleware = middlewares.SuperUserMiddleware()
 	)
 
 	apiRoutes := r.Group("api")
@@ -72,7 +72,7 @@ func SetupRouter(r *gin.Engine, db *gorm.DB) {
 			userRoutes.GET("/:id", authMiddleware, userHandler.GetUserByID)
 
 			//superuser role
-			userRoutes.PUT("/update-role/:id", userHandler.UpdateUserRoleBySuperuser)
+			userRoutes.PUT("/update-role/:id", authMiddleware, superuserMiddleware, userHandler.UpdateUserRoleBySuperuser)
 			//userRoutes.GET("", superuserMiddleware, userHandler.ListUser)
 		}
 

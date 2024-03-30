@@ -9,8 +9,9 @@ import (
 func SuperUserMiddleware() gin.HandlerFunc {
 	return func(ctx *gin.Context) {
 		user := ctx.MustGet("user").(*jwt.MapClaims)
-		id := (*user)["id"].([]any)
+		//roleNames := (*user)["role"].(any)
 
+		fmt.Println(user)
 		//isSuperUser := slices.ContainsFunc(roleNames, func(roleName any) bool {
 		//	roleNameStr := roleName.(string)
 		//	return roleNameStr == constants.ROLE["SUPER_USER"]
@@ -21,8 +22,6 @@ func SuperUserMiddleware() gin.HandlerFunc {
 		//	utils.ApiResponse(ctx, http.StatusUnauthorized, "only superuser can access this endpoint", nil, nil)
 		//	return
 		//}
-
-		fmt.Println(id)
 
 		ctx.Next()
 	}

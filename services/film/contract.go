@@ -11,7 +11,7 @@ type FilmService interface {
 	UpdateFilm(request schemas.UpdateFilmRequest, film models.Film) (*models.Film, error)
 	ListFilm() ([]*schemas.ListFilmResponse, error)
 	DeleteFilmByID(ID string) error
-	GetFilmByID(ID string) (*models.Film, error)
+	GetFilmByID(ID string) (*models.Film, *schemas.DetailFilmResponse, error)
 }
 
 type filmService struct {

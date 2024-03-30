@@ -33,6 +33,7 @@ func GenerateToken(user models.User) (*string, error) {
 	}
 	jwtToken := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
 	token, err := jwtToken.SignedString([]byte(jwtSecret))
+
 	if err != nil {
 		return nil, err
 	}
@@ -45,6 +46,7 @@ func VerifyToken(token string) (*jwt.MapClaims, error) {
 	if jwtSecretEnv == "" {
 		jwtSecretEnv = "secret"
 	}
+
 	jwtSecret := []byte(jwtSecretEnv)
 
 	jwtToken, err := jwt.Parse(token, func(token *jwt.Token) (any, error) {
@@ -52,13 +54,16 @@ func VerifyToken(token string) (*jwt.MapClaims, error) {
 		if !ok {
 			return nil, errors.New("invalid token")
 		}
+
 		return jwtSecret, nil
 	})
+
 	if err != nil {
 		return nil, err
 	}
 
 	claims, ok := jwtToken.Claims.(jwt.MapClaims)
+
 	if !ok {
 		return nil, err
 	}
