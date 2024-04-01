@@ -10,6 +10,7 @@ type FilmRepository interface {
 	GetFilmByID(ID string) (*models.Film, error)
 	GetFilmByName(name string) (*models.Film, error)
 	UpdateFilm(film models.Film) (*models.Film, error)
+	ListFilm() ([]*models.Film, error)
 	DeleteFilmByID(ID string) error
 }
 

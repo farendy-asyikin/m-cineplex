@@ -32,7 +32,7 @@ func (r *userRepository) CreateUser(user models.User) (*models.User, error) {
 
 func (r *userRepository) GetUserByID(ID string) (*models.User, error) {
 	var user models.User
-	err := r.db.Preload("Roles").Preload("Department").Preload("Level").Preload("Superior").Preload("DepartmentHead").Preload("WorkUnit.WorkUnitCategory").First(&user, ID).Error
+	err := r.db.First(&user, ID).Error
 	if err != nil {
 		if errors.Is(err, gorm.ErrRecordNotFound) {
 			return nil, errors.New("user not found")
@@ -45,12 +45,22 @@ func (r *userRepository) GetUserByID(ID string) (*models.User, error) {
 }
 
 func (r *userRepository) UpdateUser(user models.User) (*models.User, error) {
-
 	err := r.db.Model(&user).Updates(map[string]any{
 		"name":     user.Name,
 		"email":    user.Email,
 		"password": user.Password,
 	}).Error
+	if err != nil {
+		return nil, err
+	}
+
+	return &user, nil
+}
+
+func (r *userRepository) UpdateUserRoleBySuperuser(user models.User, userID uint64) (*models.User, error) {
+	err := r.db.Model(&user).Updates(map[string]any{
+		"role": user.Role,
+	}).Where("id", userID).Error
 	if err != nil {
 		return nil, err
 	}

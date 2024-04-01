@@ -6,5 +6,4 @@ type Seat struct {
 	Column     string   `gorm:"type:varchar(255);not null" json:"column"`
 	LocationID uint64   `gorm:"not null" json:"location_id"`
 	Location   Location `gorm:"foreignkey:LocationID" json:"location"`
-	IsBooked   bool     `gorm:"default:false" json:"is_booked"`
 }

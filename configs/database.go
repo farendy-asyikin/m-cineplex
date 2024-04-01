@@ -60,9 +60,11 @@ func SetupDatabaseConnection() *gorm.DB {
 	}
 
 	err = db.AutoMigrate(
-		&models.Booking{},
 		&models.User{},
+		&models.Booking{},
 		&models.Seat{},
+		&models.Booking{},
+		&models.BookedSeat{},
 		&models.Location{},
 		&models.Film{},
 	)

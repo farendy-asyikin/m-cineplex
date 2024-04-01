@@ -8,6 +8,7 @@ import (
 type FilmHandler interface {
 	CreateFilm(ctx *gin.Context)
 	GetFilmByID(ctx *gin.Context)
+	ListFilm(ctx *gin.Context)
 	UpdateFilm(ctx *gin.Context)
 	DeleteFilmByID(ctx *gin.Context)
 }

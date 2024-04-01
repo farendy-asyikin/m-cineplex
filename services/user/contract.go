@@ -9,6 +9,7 @@ import (
 type UserService interface {
 	CreateUser(request schemas.CreateUserRequest) (*models.User, error)
 	UpdateUser(request schemas.UpdateUserRequest, user models.User) (*models.User, error)
+	UpdateUserRoleBySuperuser(request schemas.UpdateUserRoleRequest, user models.User, userID uint64) (*models.User, error)
 	DeleteUserByID(ID string) error
 	GetUserByID(ID string) (*models.User, *schemas.DetailUserResponse, error)
 }

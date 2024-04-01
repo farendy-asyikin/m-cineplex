@@ -12,9 +12,14 @@ type UpdateFilmRequest struct {
 	IsActive   *bool   `json:"is_active"`
 }
 
+type ListFilmResponse struct {
+	Name     string `json:"name"`
+	Location string `json:"location"`
+}
+
 type DetailFilmResponse struct {
-	ID         uint64 `json:"id"`
-	Name       string `json:"name"`
-	LocationID string `json:"location_id"`
-	IsActive   bool   `json:"is_active"`
+	ID       uint64 `json:"id"`
+	Name     string `json:"name"`
+	Location string `json:"location"`
+	IsActive bool   `json:"is_active"`
 }

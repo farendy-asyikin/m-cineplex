@@ -27,6 +27,7 @@ func (s *authService) Login(email string, password string) (*schemas.LoginRespon
 		Token: *token,
 		ID:    user.ID,
 		Name:  user.Name,
+		Role:  user.Role,
 	}
 
 	return &response, nil

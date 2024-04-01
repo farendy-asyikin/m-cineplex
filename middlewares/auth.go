@@ -17,6 +17,7 @@ func AuthMiddleware() gin.HandlerFunc {
 		}
 
 		token := strings.Replace(authHeader, "Bearer ", "", -1)
+
 		claims, err := utils.VerifyToken(token)
 		if err != nil {
 			ctx.Abort()
